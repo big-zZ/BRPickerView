@@ -173,6 +173,7 @@ typedef NS_ENUM(NSInteger, BRDatePickerStyle) {
             case BRDatePickerModeYMDHM:
             case BRDatePickerModeYMDH:
             case BRDatePickerModeYMD:
+            case BRDatePickerModeMDY:
             case BRDatePickerModeYM:
             case BRDatePickerModeY:
             {
@@ -345,6 +346,7 @@ typedef NS_ENUM(NSInteger, BRDatePickerStyle) {
         }
             break;
         case BRDatePickerModeYMD:
+        case BRDatePickerModeMDY:
         {
             self.dateFormatter = @"yyyy-MM-dd";
             self.style = BRDatePickerStyleCustom;
@@ -652,6 +654,8 @@ typedef NS_ENUM(NSInteger, BRDatePickerStyle) {
         } else {
             indexArr = @[@(self.dayIndex), @(self.monthIndex), @(self.yearIndex)];
         }
+    } else if (self.pickerMode == BRDatePickerModeYMD) {
+        indexArr = @[@(self.monthIndex), @(self.dayIndex), @(self.yearIndex)];
     } else if (self.pickerMode == BRDatePickerModeYM) {
         if ([self.pickerStyle.language hasPrefix:@"zh"]) {
             indexArr = @[@(self.yearIndex), @(self.monthIndex)];
@@ -688,6 +692,7 @@ typedef NS_ENUM(NSInteger, BRDatePickerStyle) {
         case BRDatePickerModeYMDHM:
         case BRDatePickerModeYMDH:
         case BRDatePickerModeYMD:
+        case BRDatePickerModeMDY:
         case BRDatePickerModeYM:
         case BRDatePickerModeY:
         case BRDatePickerModeYMW:
@@ -696,7 +701,7 @@ typedef NS_ENUM(NSInteger, BRDatePickerStyle) {
         {
             NSInteger yearIndex = ([self.selectValue isEqualToString:self.lastRowContent] && self.yearArr.count > 0) ? self.yearArr.count - 1 : 0;
             NSInteger component = 0;
-            if ((self.pickerMode == BRDatePickerModeYMD || self.pickerMode == BRDatePickerModeYMW) && ![self.pickerStyle.language hasPrefix:@"zh"]) {
+            if ((self.pickerMode == BRDatePickerModeYMD || self.pickerMode == BRDatePickerModeMDY || self.pickerMode == BRDatePickerModeYMW) && ![self.pickerStyle.language hasPrefix:@"zh"]) {
                 component = 2;
             } else if ((self.pickerMode == BRDatePickerModeYM || self.pickerMode == BRDatePickerModeYQ) && ![self.pickerStyle.language hasPrefix:@"zh"]) {
                 component = 1;
@@ -767,7 +772,7 @@ typedef NS_ENUM(NSInteger, BRDatePickerStyle) {
         return 4;
     } else if (self.pickerMode == BRDatePickerModeMDHM) {
         return 4;
-    } else if (self.pickerMode == BRDatePickerModeYMD) {
+    } else if (self.pickerMode == BRDatePickerModeYMD || self.pickerMode == BRDatePickerModeMDY) {
         return 3;
     } else if (self.pickerMode == BRDatePickerModeYM) {
         return 2;
@@ -808,6 +813,8 @@ typedef NS_ENUM(NSInteger, BRDatePickerStyle) {
         } else {
             rowsArr = @[@(self.dayArr.count), @(self.monthArr.count), @(self.yearArr.count)];
         }
+    } else if (self.pickerMode == BRDatePickerModeMDY) {
+        rowsArr = @[@(self.monthArr.count), @(self.dayArr.count), @(self.yearArr.count)];
     } else if (self.pickerMode == BRDatePickerModeYM) {
         if ([self.pickerStyle.language hasPrefix:@"zh"]) {
             rowsArr = @[@(self.yearArr.count), @(self.monthArr.count)];
@@ -916,6 +923,14 @@ typedef NS_ENUM(NSInteger, BRDatePickerStyle) {
             titleString = [self getMonthText:self.monthArr row:row];
         } else if (component == 2) {
             titleString = [self.pickerStyle.language hasPrefix:@"zh"] ? [self getDayText:self.dayArr row:row mSelectDate:self.mSelectDate] : [self getYearText:self.yearArr row:row];
+        }
+    } else if (self.pickerMode == BRDatePickerModeMDY) {
+        if (component == 0) {
+            titleString = [self getMonthText:self.monthArr row:row];
+        } else if (component == 1) {
+            titleString = [self getDayText:self.dayArr row:row mSelectDate:self.mSelectDate];
+        } else if (component == 2) {
+            titleString = [self getYearText:self.yearArr row:row];
         }
     } else if (self.pickerMode == BRDatePickerModeYM) {
         if (component == 0) {
@@ -1166,32 +1181,47 @@ typedef NS_ENUM(NSInteger, BRDatePickerStyle) {
             }
         }
         
-    } else if (self.pickerMode == BRDatePickerModeYMD) {
-        if (component == 0) {
-            if ([self.pickerStyle.language hasPrefix:@"zh"]) {
-                self.yearIndex = row;
-                [self reloadDateArrayWithUpdateMonth:YES updateDay:YES updateHour:NO updateMinute:NO updateSecond:NO];
+    } else if (self.pickerMode == BRDatePickerModeYMD || self.pickerMode == BRDatePickerModeMDY) {
+        if (self.pickerMode == BRDatePickerModeMDY) {
+            if (component == 0) {
+                self.monthIndex = row;
+                [self reloadDateArrayWithUpdateMonth:NO updateDay:YES updateHour:NO updateMinute:NO updateSecond:NO];
                 [self.pickerView reloadComponent:1];
-                [self.pickerView reloadComponent:2];
-            } else {
+            } else if (component == 1) {
                 self.dayIndex = row;
-            }
-        } else if (component == 1) {
-            self.monthIndex = row;
-            [self reloadDateArrayWithUpdateMonth:NO updateDay:YES updateHour:NO updateMinute:NO updateSecond:NO];
-            if ([self.pickerStyle.language hasPrefix:@"zh"]) {
-                [self.pickerView reloadComponent:2];
-            } else {
-                [self.pickerView reloadComponent:0];
-            }
-        } else if (component == 2) {
-            if ([self.pickerStyle.language hasPrefix:@"zh"]) {
-                self.dayIndex = row;
-            } else {
+            } else if (component == 2) {
                 self.yearIndex = row;
                 [self reloadDateArrayWithUpdateMonth:YES updateDay:YES updateHour:NO updateMinute:NO updateSecond:NO];
                 [self.pickerView reloadComponent:0];
                 [self.pickerView reloadComponent:1];
+            }
+        } else {
+            if (component == 0) {
+                if ([self.pickerStyle.language hasPrefix:@"zh"]) {
+                    self.yearIndex = row;
+                    [self reloadDateArrayWithUpdateMonth:YES updateDay:YES updateHour:NO updateMinute:NO updateSecond:NO];
+                    [self.pickerView reloadComponent:1];
+                    [self.pickerView reloadComponent:2];
+                } else {
+                    self.dayIndex = row;
+                }
+            } else if (component == 1) {
+                self.monthIndex = row;
+                [self reloadDateArrayWithUpdateMonth:NO updateDay:YES updateHour:NO updateMinute:NO updateSecond:NO];
+                if ([self.pickerStyle.language hasPrefix:@"zh"]) {
+                    [self.pickerView reloadComponent:2];
+                } else {
+                    [self.pickerView reloadComponent:0];
+                }
+            } else if (component == 2) {
+                if ([self.pickerStyle.language hasPrefix:@"zh"]) {
+                    self.dayIndex = row;
+                } else {
+                    self.yearIndex = row;
+                    [self reloadDateArrayWithUpdateMonth:YES updateDay:YES updateHour:NO updateMinute:NO updateSecond:NO];
+                    [self.pickerView reloadComponent:0];
+                    [self.pickerView reloadComponent:1];
+                }
             }
         }
         

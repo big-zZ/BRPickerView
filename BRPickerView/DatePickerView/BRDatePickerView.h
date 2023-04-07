@@ -35,6 +35,8 @@ typedef NS_ENUM(NSInteger, BRDatePickerMode) {
     BRDatePickerModeMDHM,
     /** 【yyyy-MM-dd】年月日（兼容国际化日期：dd-MM-yyyy）*/
     BRDatePickerModeYMD,
+    /** 【MM-dd-yyyy】月日年 */
+    BRDatePickerModeMDY,
     /** 【yyyy-MM】年月（兼容国际化日期：MM-yyyy）*/
     BRDatePickerModeYM,
     /** 【yyyy】年 */
