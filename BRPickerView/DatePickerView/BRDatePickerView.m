@@ -654,7 +654,7 @@ typedef NS_ENUM(NSInteger, BRDatePickerStyle) {
         } else {
             indexArr = @[@(self.dayIndex), @(self.monthIndex), @(self.yearIndex)];
         }
-    } else if (self.pickerMode == BRDatePickerModeYMD) {
+    } else if (self.pickerMode == BRDatePickerModeMDY) {
         indexArr = @[@(self.monthIndex), @(self.dayIndex), @(self.yearIndex)];
     } else if (self.pickerMode == BRDatePickerModeYM) {
         if ([self.pickerStyle.language hasPrefix:@"zh"]) {

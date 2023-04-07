@@ -180,6 +180,7 @@ BRSYNTH_DUMMY_CLASS(BRDatePickerView_BR)
             case BRDatePickerModeYMDHM:
             case BRDatePickerModeYMDH:
             case BRDatePickerModeYMD:
+            case BRDatePickerModeMDY:
             case BRDatePickerModeYM:
             case BRDatePickerModeY:
             {
@@ -466,6 +467,7 @@ BRSYNTH_DUMMY_CLASS(BRDatePickerView_BR)
                 case BRDatePickerModeYMDHM:
                 case BRDatePickerModeYMDH:
                 case BRDatePickerModeYMD:
+                case BRDatePickerModeMDY:
                 case BRDatePickerModeYM:
                 case BRDatePickerModeY:
                 {
@@ -554,7 +556,7 @@ BRSYNTH_DUMMY_CLASS(BRDatePickerView_BR)
         NSInteger index = [monthString integerValue] - 1;
         monthString = (index >= 0 && index < self.monthNames.count) ? self.monthNames[index] : @"";
     } else {
-        if (![self.pickerStyle.language hasPrefix:@"zh"] && (self.pickerMode == BRDatePickerModeYMD || self.pickerMode == BRDatePickerModeYM || self.pickerMode == BRDatePickerModeYMW)) {
+        if (![self.pickerStyle.language hasPrefix:@"zh"] && (self.pickerMode == BRDatePickerModeYMD || self.pickerMode == BRDatePickerModeMDY || self.pickerMode == BRDatePickerModeYM || self.pickerMode == BRDatePickerModeYMW)) {
             // 非中文环境：月份使用系统的月份名称
             NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
             dateFormatter.locale = [[NSLocale alloc]initWithLocaleIdentifier:self.pickerStyle.language];
