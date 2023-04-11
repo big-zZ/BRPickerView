@@ -18,6 +18,8 @@
 @property (nonatomic, copy) NSString *birthdayStr;
 /** 出生时刻 */
 @property (nonatomic, copy) NSString *birthtimeStr;
+/** 选择时刻 */
+@property (nonatomic, copy) NSString *selectedTimeStr;
 /** 联系方式 */
 @property (nonatomic, copy) NSString *phoneStr;
 /** 地区 */

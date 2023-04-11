@@ -11,6 +11,8 @@
 #import "NSBundle+BRPickerView.h"
 #import "BRDatePickerView+BR.h"
 
+static NSInteger kMaxLoopNumber = 50;
+
 /// 日期选择器的类型
 typedef NS_ENUM(NSInteger, BRDatePickerStyle) {
     BRDatePickerStyleSystem,   // 系统样式：使用 UIDatePicker
@@ -640,48 +642,72 @@ typedef NS_ENUM(NSInteger, BRDatePickerStyle) {
     self.secondIndex = [self getIndexWithArray:self.secondArr object:[self getMDHMSNumber:selectDate.br_second]];
     
     NSArray *indexArr = nil;
+    NSArray *countArr = nil;
     if (self.pickerMode == BRDatePickerModeYMDHMS) {
         indexArr = @[@(self.yearIndex), @(self.monthIndex), @(self.dayIndex), @(self.hourIndex), @(self.minuteIndex), @(self.secondIndex)];
+        countArr = @[@(self.yearArr.count), @(self.monthArr.count), @(self.dayArr.count), @(self.hourArr.count), @(self.minuteArr.count), @(self.secondArr.count)];
     } else if (self.pickerMode == BRDatePickerModeYMDHM) {
         indexArr = @[@(self.yearIndex), @(self.monthIndex), @(self.dayIndex), @(self.hourIndex), @(self.minuteIndex)];
+        countArr = @[@(self.yearArr.count), @(self.monthArr.count), @(self.dayArr.count), @(self.hourArr.count), @(self.minuteArr.count)];
     } else if (self.pickerMode == BRDatePickerModeYMDH) {
         indexArr = @[@(self.yearIndex), @(self.monthIndex), @(self.dayIndex), @(self.hourIndex)];
+        countArr = @[@(self.yearArr.count), @(self.monthArr.count), @(self.dayArr.count), @(self.hourArr.count)];
     } else if (self.pickerMode == BRDatePickerModeMDHM) {
         indexArr = @[@(self.monthIndex), @(self.dayIndex), @(self.hourIndex), @(self.minuteIndex)];
+        countArr = @[@(self.monthArr.count), @(self.dayArr.count), @(self.hourArr.count), @(self.minuteArr.count)];
     } else if (self.pickerMode == BRDatePickerModeYMD) {
         if ([self.pickerStyle.language hasPrefix:@"zh"]) {
             indexArr = @[@(self.yearIndex), @(self.monthIndex), @(self.dayIndex)];
+            countArr = @[@(self.yearArr.count), @(self.monthArr.count), @(self.dayArr.count)];
         } else {
             indexArr = @[@(self.dayIndex), @(self.monthIndex), @(self.yearIndex)];
+            countArr = @[@(self.dayArr.count), @(self.monthArr.count), @(self.yearArr.count)];
         }
     } else if (self.pickerMode == BRDatePickerModeMDY) {
         indexArr = @[@(self.monthIndex), @(self.dayIndex), @(self.yearIndex)];
+        countArr = @[@(self.monthArr.count), @(self.dayArr.count), @(self.yearArr.count)];
     } else if (self.pickerMode == BRDatePickerModeYM) {
         if ([self.pickerStyle.language hasPrefix:@"zh"]) {
             indexArr = @[@(self.yearIndex), @(self.monthIndex)];
+            countArr = @[@(self.yearArr.count), @(self.monthArr.count)];
         } else {
             indexArr = @[@(self.monthIndex), @(self.yearIndex)];
+            countArr = @[@(self.monthArr.count), @(self.yearArr.count)];
         }
     } else if (self.pickerMode == BRDatePickerModeY) {
         indexArr = @[@(self.yearIndex)];
+        countArr = @[@(self.yearArr.count)];
     } else if (self.pickerMode == BRDatePickerModeMD) {
         indexArr = @[@(self.monthIndex), @(self.dayIndex)];
+        countArr = @[@(self.monthArr.count), @(self.dayArr.count)];
     } else if (self.pickerMode == BRDatePickerModeHMS) {
         indexArr = @[@(self.hourIndex), @(self.minuteIndex), @(self.secondIndex)];
+        countArr = @[@(self.hourArr.count), @(self.minuteArr.count), @(self.secondArr.count)];
     } else if (self.pickerMode == BRDatePickerModeHM) {
         indexArr = @[@(self.hourIndex), @(self.minuteIndex)];
+        countArr = @[@(self.hourArr.count), @(self.minuteArr.count)];
     } else if (self.pickerMode == BRDatePickerModeMS) {
         indexArr = @[@(self.minuteIndex), @(self.secondIndex)];
+        countArr = @[@(self.minuteArr.count), @(self.secondArr.count)];
     } else if (self.pickerMode == BRDatePickerModeYMW) {
         indexArr = @[@(self.yearIndex), @(self.monthIndex), @(self.monthWeekIndex)];
+        countArr = @[@(self.yearArr.count), @(self.monthArr.count), @(self.monthWeekArr.count)];
     } else if (self.pickerMode == BRDatePickerModeYW) {
         indexArr = @[@(self.yearIndex), @(self.yearWeekIndex)];
+        countArr = @[@(self.yearArr.count), @(self.yearWeekArr.count)];
     } else if (self.pickerMode == BRDatePickerModeYQ) {
         indexArr = @[@(self.yearIndex), @(self.quarterIndex)];
+        countArr = @[@(self.yearArr.count), @(self.quarterArr.count)];
     }
     if (!indexArr) return;
     for (NSInteger i = 0; i < indexArr.count; i++) {
-        [self.pickerView selectRow:[indexArr[i] integerValue] inComponent:i animated:animated];
+        /// 当pickerMode为BRDatePickerModeY 且isLoop为YES时 默认滚动至中间的row 才能有可以无限循环滚动的效果
+        NSInteger row = [indexArr[i] integerValue];
+        if (self.isLoop) {
+            NSInteger count = [countArr[i] integerValue];
+            row = count * (kMaxLoopNumber / 2) + row;
+        }
+        [self.pickerView selectRow:row inComponent:i animated:animated];
     }
 }
 
@@ -706,7 +732,7 @@ typedef NS_ENUM(NSInteger, BRDatePickerStyle) {
             } else if ((self.pickerMode == BRDatePickerModeYM || self.pickerMode == BRDatePickerModeYQ) && ![self.pickerStyle.language hasPrefix:@"zh"]) {
                 component = 1;
             }
-            [self.pickerView selectRow:yearIndex inComponent:component animated:animated];
+            [self.pickerView selectRow:yearIndex * (kMaxLoopNumber / 2) inComponent:component animated:animated];
         }
             break;
         case BRDatePickerModeMDHM:
@@ -720,6 +746,10 @@ typedef NS_ENUM(NSInteger, BRDatePickerStyle) {
         case BRDatePickerModeHM:
         {
             NSInteger hourIndex = ([self.selectValue isEqualToString:self.lastRowContent] && self.hourArr.count > 0) ? self.hourArr.count - 1 : 0;
+            /// 当pickerMode为BRDatePickerModeY 且isLoop为YES时 默认滚动至中间的row 才能有可以无限循环滚动的效果
+            if (self.isLoop) {
+                hourIndex = self.hourArr.count * (kMaxLoopNumber / 2) + hourIndex;
+            }
             [self.pickerView selectRow:hourIndex inComponent:0 animated:animated];
         }
             break;
@@ -839,7 +869,7 @@ typedef NS_ENUM(NSInteger, BRDatePickerStyle) {
         rowsArr = @[@(self.yearArr.count), @(self.quarterArr.count)];
     }
     if (component >= 0 && component < rowsArr.count) {
-        return [rowsArr[component] integerValue];
+        return [rowsArr[component] integerValue] * (self.isLoop ? kMaxLoopNumber : 1);
     }
     return 0;
 }
@@ -1355,11 +1385,11 @@ typedef NS_ENUM(NSInteger, BRDatePickerStyle) {
         
     } else if (self.pickerMode == BRDatePickerModeHM) {
         if (component == 0) {
-            self.hourIndex = row;
+            self.hourIndex = row % self.hourArr.count;
             [self reloadDateArrayWithUpdateMonth:NO updateDay:NO updateHour:NO updateMinute:YES updateSecond:NO];
             [self.pickerView reloadComponent:1];
         } else if (component == 1) {
-            self.minuteIndex = row;
+            self.minuteIndex = row % self.minuteArr.count;
         }
         
         NSString *hourString = [self getHourString];
@@ -1838,6 +1868,10 @@ typedef NS_ENUM(NSInteger, BRDatePickerStyle) {
         _monthNames = [NSArray array];
     }
     return _monthNames;
+}
+
+- (BOOL)isLoop {
+    return _pickerMode == BRDatePickerModeHM ? _isLoop : NO;
 }
 
 - (NSString *)getYearString {

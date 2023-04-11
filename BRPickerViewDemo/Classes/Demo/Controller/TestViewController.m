@@ -43,6 +43,7 @@ typedef NS_ENUM(NSInteger, BRTimeType) {
 @property (nonatomic, assign) NSInteger genderSelectIndex;
 @property (nonatomic, strong) NSDate *birthdaySelectDate;
 @property (nonatomic, strong) NSDate *birthtimeSelectDate;
+@property (nonatomic, strong) NSDate *pageTimeSelectDate;
 @property (nonatomic, assign) NSInteger educationSelectIndex;
 @property (nonatomic, copy) NSArray <NSNumber *> *addressSelectIndexs;
 @property (nonatomic, copy) NSArray <NSNumber *> *linkage2SelectIndexs;
@@ -70,6 +71,7 @@ typedef NS_ENUM(NSInteger, BRTimeType) {
     self.infoModel.genderStr = @"";
     self.infoModel.birthdayStr = @"";
     self.infoModel.birthtimeStr = @"";
+    self.infoModel.selectedTimeStr = @"";
     self.infoModel.phoneStr = @"";
     self.infoModel.addressStr = @"";
     self.infoModel.educationStr = @"";
@@ -98,6 +100,7 @@ typedef NS_ENUM(NSInteger, BRTimeType) {
     NSLog(@"性别：%@", self.infoModel.genderStr);
     NSLog(@"出生日期：%@", self.infoModel.birthdayStr);
     NSLog(@"出生时刻：%@", self.infoModel.birthtimeStr);
+    NSLog(@"x选择时刻：%@", self.infoModel.selectedTimeStr);
     NSLog(@"联系方式：%@", self.infoModel.phoneStr);
     NSLog(@"地址：%@", self.infoModel.addressStr);
     NSLog(@"学历：%@", self.infoModel.educationStr);
@@ -173,6 +176,13 @@ typedef NS_ENUM(NSInteger, BRTimeType) {
             break;
         case 4:
         {
+            cell.canEdit = NO;
+            cell.textField.placeholder = @"请选择";
+            cell.textField.text = self.infoModel.selectedTimeStr;
+        }
+            break;
+        case 5:
+        {
             cell.canEdit = YES;
             cell.textField.placeholder = @"请输入";
             cell.textField.keyboardType = UIKeyboardTypeNumberPad;
@@ -180,24 +190,18 @@ typedef NS_ENUM(NSInteger, BRTimeType) {
             cell.textField.text = self.infoModel.phoneStr;
         }
             break;
-        case 5:
+        case 6:
         {
             cell.canEdit = NO;
             cell.textField.placeholder = @"请选择";
             cell.textField.text = self.infoModel.addressStr;
         }
             break;
-        case 6:
-        {
-            cell.canEdit = NO;
-            cell.textField.placeholder = @"请选择";
-            cell.textField.text = self.infoModel.educationStr;
-        }
-            break;
         case 7:
         {
             cell.canEdit = NO;
             cell.textField.placeholder = @"请选择";
+            cell.textField.text = self.infoModel.educationStr;
         }
             break;
         case 8:
@@ -213,6 +217,12 @@ typedef NS_ENUM(NSInteger, BRTimeType) {
         }
             break;
         case 10:
+        {
+            cell.canEdit = NO;
+            cell.textField.placeholder = @"请选择";
+        }
+            break;
+        case 11:
         {
             cell.canEdit = NO;
             cell.textField.placeholder = @"请选择";
@@ -240,7 +250,7 @@ typedef NS_ENUM(NSInteger, BRTimeType) {
 
 #pragma mark - UITextFieldDelegate 返回键
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
-    if (textField.tag == 0 || textField.tag == 4) {
+    if (textField.tag == 0 || textField.tag == 5) {
         [textField resignFirstResponder];
     }
     return YES;
@@ -248,7 +258,7 @@ typedef NS_ENUM(NSInteger, BRTimeType) {
 
 #pragma mark - UITextFieldDelegate
 - (BOOL)textFieldShouldBeginEditing:(UITextField *)textField {
-    if (textField.tag == 0 || textField.tag == 4) {
+    if (textField.tag == 0 || textField.tag == 5) {
         [textField addTarget:self action:@selector(handlerTextFieldEndEdit:) forControlEvents:UIControlEventEditingDidEnd];
         return YES; // 当前 textField 可以编辑
     } else {
@@ -267,7 +277,7 @@ typedef NS_ENUM(NSInteger, BRTimeType) {
             self.infoModel.nameStr = textField.text;
         }
             break;
-        case 4:
+        case 5:
         {
             self.infoModel.phoneStr = textField.text;
         }
@@ -383,7 +393,28 @@ typedef NS_ENUM(NSInteger, BRTimeType) {
         }
             break;
             
-        case 5:
+        case 4:
+        {
+            // 时间
+            BRDatePickerView *datePickerView = [[BRDatePickerView alloc]init];
+            datePickerView.pickerMode = BRDatePickerModeHM;
+            datePickerView.isLoop = YES;
+            datePickerView.title = @"请选择时间";
+            datePickerView.selectDate = self.pageTimeSelectDate;
+            datePickerView.resultBlock = ^(NSDate *selectDate, NSString *selectValue) {
+                self.pageTimeSelectDate = selectDate;
+                self.infoModel.selectedTimeStr = selectValue;
+                textField.text = selectValue;
+            };
+            
+            BRPickerStyle *customStyle = [BRPickerStyle pickerStyleWithThemeColor:[UIColor darkGrayColor]];
+            datePickerView.pickerStyle = customStyle;
+            
+            [datePickerView show];
+        }
+            break;
+            
+        case 6:
         {
             // 地区
             BRAddressPickerView *addressPickerView = [[BRAddressPickerView alloc]init];
@@ -403,7 +434,7 @@ typedef NS_ENUM(NSInteger, BRTimeType) {
         }
             break;
             
-        case 6:
+        case 7:
         {
             // 学历
             BRStringPickerView *stringPickerView = [[BRStringPickerView alloc]init];
@@ -434,7 +465,7 @@ typedef NS_ENUM(NSInteger, BRTimeType) {
         }
             break;
             
-        case 7:
+        case 8:
         {
             /// 融资情况
             NSArray *infoArr = @[@{@"key": @"1001", @"value": @"无融资", @"remark": @""},
@@ -467,7 +498,7 @@ typedef NS_ENUM(NSInteger, BRTimeType) {
         }
             break;
             
-        case 8:
+        case 9:
         {
             /// 多列字符串
             BRStringPickerView *stringPickerView = [[BRStringPickerView alloc]init];
@@ -487,7 +518,7 @@ typedef NS_ENUM(NSInteger, BRTimeType) {
         }
             break;
             
-        case 9:
+        case 10:
         {
             /// 二级联动选择
             BRStringPickerView *stringPickerView = [[BRStringPickerView alloc]init];
@@ -524,7 +555,7 @@ typedef NS_ENUM(NSInteger, BRTimeType) {
         }
             break;
             
-        case 10:
+        case 11:
         {
             /// 三级联动选择
             BRStringPickerView *stringPickerView = [[BRStringPickerView alloc]init];
@@ -872,7 +903,7 @@ typedef NS_ENUM(NSInteger, BRTimeType) {
 
 - (NSArray *)titleArr {
     if (!_titleArr) {
-        _titleArr = @[@"姓名", @"性别", @"出生年月", @"出生时刻", @"联系方式", @"地址", @"学历", @"融资", @"多列选择", @"二级联动选择", @"三级联动选择"];
+        _titleArr = @[@"姓名", @"性别", @"出生年月", @"出生时刻", @"时间选择", @"联系方式", @"地址", @"学历", @"融资", @"多列选择", @"二级联动选择", @"三级联动选择"];
     }
     return _titleArr;
 }

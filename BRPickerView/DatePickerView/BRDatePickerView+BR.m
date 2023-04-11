@@ -529,6 +529,7 @@ BRSYNTH_DUMMY_CLASS(BRDatePickerView_BR)
 
 - (NSString *)getYearText:(NSArray *)yearArr row:(NSInteger)row {
     NSInteger index = 0;
+    row = row % yearArr.count;
     if (row >= 0) {
         index = MIN(row, yearArr.count - 1);
     }
@@ -542,6 +543,7 @@ BRSYNTH_DUMMY_CLASS(BRDatePickerView_BR)
 
 - (NSString *)getMonthText:(NSArray *)monthArr row:(NSInteger)row {
     NSInteger index = 0;
+    row = row % monthArr.count;
     if (row >= 0) {
         index = MIN(row, monthArr.count - 1);
     }
@@ -577,6 +579,7 @@ BRSYNTH_DUMMY_CLASS(BRDatePickerView_BR)
 
 - (NSString *)getDayText:(NSArray *)dayArr row:(NSInteger)row mSelectDate:(NSDate *)mSelectDate {
     NSInteger index = 0;
+    row = row % dayArr.count;
     if (row >= 0) {
         index = MIN(row, dayArr.count - 1);
     }
@@ -596,6 +599,7 @@ BRSYNTH_DUMMY_CLASS(BRDatePickerView_BR)
 
 - (NSString *)getHourText:(NSArray *)hourArr row:(NSInteger)row {
     NSInteger index = 0;
+    row = row % hourArr.count;
     if (row >= 0) {
         index = MIN(row, hourArr.count - 1);
     }
@@ -609,6 +613,7 @@ BRSYNTH_DUMMY_CLASS(BRDatePickerView_BR)
 
 - (NSString *)getMinuteText:(NSArray *)minuteArr row:(NSInteger)row {
     NSInteger index = 0;
+    row = row % minuteArr.count;
     if (row >= 0) {
         index = MIN(row, minuteArr.count - 1);
     }
@@ -619,6 +624,7 @@ BRSYNTH_DUMMY_CLASS(BRDatePickerView_BR)
 
 - (NSString *)getSecondText:(NSArray *)secondArr row:(NSInteger)row {
     NSInteger index = 0;
+    row = row % secondArr.count;
     if (row >= 0) {
         index = MIN(row, secondArr.count - 1);
     }
@@ -629,6 +635,7 @@ BRSYNTH_DUMMY_CLASS(BRDatePickerView_BR)
 
 - (NSString *)getWeekText:(NSArray *)weekArr row:(NSInteger)row {
     NSInteger index = 0;
+    row = row % weekArr.count;
     if (row >= 0) {
         index = MIN(row, weekArr.count - 1);
     }
@@ -642,6 +649,7 @@ BRSYNTH_DUMMY_CLASS(BRDatePickerView_BR)
 
 - (NSString *)getQuarterText:(NSArray *)quarterArr row:(NSInteger)row {
     NSInteger index = 0;
+    row = row % quarterArr.count;
     if (row >= 0) {
         index = MIN(row, quarterArr.count - 1);
     }

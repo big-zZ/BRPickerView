@@ -173,6 +173,9 @@ typedef void (^BRDateResultRangeBlock)(NSDate * _Nullable selectStartDate, NSDat
 /** 不允许选择日期的回调 */
 @property (nullable, nonatomic, copy) BRDateResultBlock nonSelectableBlock;
 
+/** 是否循环显示 默认为NO   目前仅支持 ‘BRDatePickerModeHM’  其余都为NO */
+@property (nonatomic, assign) BOOL isLoop;
+
 /// 初始化日期选择器
 /// @param pickerMode  日期选择器显示类型
 - (instancetype)initWithPickerMode:(BRDatePickerMode)pickerMode;
