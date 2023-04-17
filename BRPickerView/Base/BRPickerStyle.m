@@ -388,8 +388,18 @@
             id obj = [columnView valueForKey:@"middleContainerView"];
             if (obj && [obj isKindOfClass:[UIView class]]) {
                 UIView *selectRowView = (UIView *)obj;
-                // 中间选中行的背景颜色
-                selectRowView.backgroundColor = self.selectRowColor;
+                
+                if (self.selectRowSideOffset > 0) {
+                    CGRect frame = selectRowView.frame;
+                    UIView *midView = [[UIView alloc] initWithFrame:CGRectMake(self.selectRowSideOffset, 0, CGRectGetWidth(frame) - self.selectRowSideOffset * 2, CGRectGetHeight(frame))];
+                    midView.backgroundColor = self.selectRowColor;
+                    midView.layer.cornerRadius = self.selectRowCornerRadius;
+                    [selectRowView addSubview:midView];
+                    [selectRowView sendSubviewToBack:midView];
+                } else {
+                    // 中间选中行的背景颜色
+                    selectRowView.backgroundColor = self.selectRowColor;
+                }
             }
         }
     }

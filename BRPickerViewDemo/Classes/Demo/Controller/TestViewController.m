@@ -363,10 +363,13 @@ typedef NS_ENUM(NSInteger, BRTimeType) {
             BRPickerStyle *customStyle = [[BRPickerStyle alloc]init];
             customStyle.pickerColor = [UIColor clearColor];
             customStyle.selectRowTextColor = [UIColor blueColor];
+            customStyle.selectRowColor = UIColor.greenColor;
+            customStyle.selectRowSideOffset = 40.f;
+            customStyle.selectRowCornerRadius = 2.f;
+
             datePickerView.pickerStyle = customStyle;
             
             [datePickerView show];
-            
         }
             break;
             

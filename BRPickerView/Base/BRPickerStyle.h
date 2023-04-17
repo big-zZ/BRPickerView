@@ -181,6 +181,12 @@ typedef NS_ENUM(NSInteger, BRBorderStyle) {
 /** 设置 picker 中间选中行文本的颜色。暂不支持日期选择器前4种类型 */
 @property (nullable, nonatomic, strong) UIColor *selectRowTextColor;
 
+/** 设置 picker 中间选中行两端的间距 仅当设置了selectRowColor 才有效*/
+@property (nonatomic, assign) CGFloat selectRowSideOffset;
+
+/** 设置 picker 中间选中行 四个角的圆弧角度  仅当selectRowSideOffset > 0时 才有效 */
+@property (nonatomic, assign) CGFloat selectRowCornerRadius;
+
 /** 设置 picker 中间选中行文本的字体。暂不支持日期选择器前4种类型 */
 @property (nullable, nonatomic, strong) UIFont *selectRowTextFont;
 
