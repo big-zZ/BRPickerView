@@ -167,7 +167,7 @@
         _cancelBtn.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin;
         _cancelBtn.backgroundColor = self.pickerStyle.cancelColor;;
         _cancelBtn.titleLabel.font = self.pickerStyle.cancelTextFont;
-        _cancelBtn.titleLabel.textAlignment = self.pickerStyle.cancelTextAlignment;
+        _cancelBtn.contentHorizontalAlignment = self.pickerStyle.cancelContentAlignment;
         [_cancelBtn setTitleColor:self.pickerStyle.cancelTextColor forState:UIControlStateNormal];
         if (self.pickerStyle.cancelBtnImage) {
             [_cancelBtn setImage:self.pickerStyle.cancelBtnImage forState:UIControlStateNormal];
@@ -202,7 +202,7 @@
         }
         if (self.pickerStyle.doneBtnTitle) {
             _doneBtn.titleLabel.font = self.pickerStyle.doneTextFont;
-            _doneBtn.titleLabel.textAlignment = self.pickerStyle.cancelTextAlignment;
+            _doneBtn.contentHorizontalAlignment = self.pickerStyle.doneContentAlignment;
             [_doneBtn setTitleColor:self.pickerStyle.doneTextColor forState:UIControlStateNormal];
             [_doneBtn setTitle:self.pickerStyle.doneBtnTitle forState:UIControlStateNormal];
         }
