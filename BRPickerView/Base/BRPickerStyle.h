@@ -103,6 +103,9 @@ typedef NS_ENUM(NSInteger, BRBorderStyle) {
 /** 设置 cancelBtn 标题的字体 */
 @property (nullable, nonatomic, strong) UIFont *cancelTextFont;
 
+/** 设置cancelBtn标题的文本对齐方式 */
+@property (nonatomic, assign) NSTextAlignment cancelTextAlignment;
+
 /** 设置 cancelBtn 的 frame */
 @property (nonatomic, assign) CGRect cancelBtnFrame;
 
@@ -135,6 +138,9 @@ typedef NS_ENUM(NSInteger, BRBorderStyle) {
 
 /** 设置 doneBtn 标题的字体 */
 @property (nullable, nonatomic, strong) UIFont *doneTextFont;
+
+/** 设置doneBtn标题的文本对齐方式 */
+@property (nonatomic, assign) NSTextAlignment doneTextAlignment;
 
 /** 设置 doneBtn 的 frame */
 @property (nonatomic, assign) CGRect doneBtnFrame;
