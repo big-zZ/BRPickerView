@@ -176,6 +176,9 @@ typedef void (^BRDateResultRangeBlock)(NSDate * _Nullable selectStartDate, NSDat
 /** 是否循环显示 默认为NO   目前仅支持 ‘BRDatePickerModeHM’  其余都为NO */
 @property (nonatomic, assign) BOOL isLoop;
 
+/** 时间标题数组 用于说明当前栏是哪个类型 */
+@property (nonatomic, copy) NSArray <NSString *> * __nullable timeTitles;
+
 /// 初始化日期选择器
 /// @param pickerMode  日期选择器显示类型
 - (instancetype)initWithPickerMode:(BRDatePickerMode)pickerMode;

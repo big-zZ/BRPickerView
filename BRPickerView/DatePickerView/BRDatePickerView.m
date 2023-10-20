@@ -30,6 +30,8 @@ typedef NS_ENUM(NSInteger, BRDatePickerStyle) {
 /** 日期选择器2 */
 @property (nonatomic, strong) UIPickerView *pickerView;
 
+@property (nonatomic, strong) UIView *titleBgView;
+
 /// 日期存储数组
 @property(nonatomic, copy) NSArray *yearArr;
 @property(nonatomic, copy) NSArray *monthArr;
@@ -1790,6 +1792,28 @@ typedef NS_ENUM(NSInteger, BRDatePickerStyle) {
 
 - (void)setAddCustomString:(NSString *)addCustomString {
     self.lastRowContent = addCustomString;
+}
+
+- (void)setTimeTitles:(NSArray<NSString *> *)timeTitles {
+    _timeTitles = timeTitles;
+    if (!_titleBgView) {
+        _titleBgView = [[UIView alloc] initWithFrame:CGRectMake(0, self.pickerStyle.titleBarHeight, CGRectGetWidth(self.alertView.frame), 25.f)];
+        [self.alertView addSubview:_titleBgView];
+    }
+    [self.alertView bringSubviewToFront:_titleBgView];
+    [_titleBgView.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [obj removeFromSuperview];
+    }];
+    CGFloat width = CGRectGetWidth(self.frame) / timeTitles.count;
+    [timeTitles enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        UILabel *timeLab = [[UILabel alloc] initWithFrame:CGRectMake(idx * width, 0, width, 25.f)];
+        timeLab.font = [UIFont fontWithName:@"PingFangSC-Regula" size:14.f];
+        timeLab.adjustsFontSizeToFitWidth = YES;
+        timeLab.textAlignment = NSTextAlignmentCenter;
+        timeLab.textColor = UIColor.whiteColor;
+        timeLab.text = obj;
+        [self.titleBgView addSubview:timeLab];
+    }];
 }
 
 #pragma mark - getter 方法

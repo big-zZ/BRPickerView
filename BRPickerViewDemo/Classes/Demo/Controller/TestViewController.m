@@ -370,6 +370,9 @@ typedef NS_ENUM(NSInteger, BRTimeType) {
             datePickerView.pickerStyle = customStyle;
             
             [datePickerView show];
+            
+            datePickerView.timeTitles = @[@"年", @"月", @"日"];
+
         }
             break;
             
