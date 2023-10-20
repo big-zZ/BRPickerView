@@ -1806,8 +1806,14 @@ typedef NS_ENUM(NSInteger, BRDatePickerStyle) {
     }];
     CGFloat width = CGRectGetWidth(self.frame) / timeTitles.count;
     [timeTitles enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        UILabel *timeLab = [[UILabel alloc] initWithFrame:CGRectMake(idx * width, 0, width, 25.f)];
-        timeLab.font = [UIFont fontWithName:@"PingFangSC-Regula" size:14.f];
+        CGFloat x_space = 0.f;
+        if (idx == 0) {
+            x_space = 10.f;
+        } else if (idx == timeTitles.count - 1) {
+            x_space = -10.f;
+        }
+        UILabel *timeLab = [[UILabel alloc] initWithFrame:CGRectMake(x_space + idx * width, 0, width - MAX(x_space, 0.f), 25.f)];
+        timeLab.font = [UIFont fontWithName:@"PingFangSC-Regula" size:12.f];
         timeLab.adjustsFontSizeToFitWidth = YES;
         timeLab.textAlignment = NSTextAlignmentCenter;
         timeLab.textColor = UIColor.whiteColor;

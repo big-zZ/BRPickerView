@@ -313,7 +313,8 @@ typedef NS_ENUM(NSInteger, BRTimeType) {
         {
             // 出生年月日
             BRDatePickerView *datePickerView = [[BRDatePickerView alloc]init];
-            datePickerView.pickerMode = BRDatePickerModeYMD;
+            datePickerView.showUnitType = BRShowUnitTypeNone;
+            datePickerView.pickerMode = BRDatePickerModeYMDHMS;
             datePickerView.title = @"请选择年月日";
             datePickerView.selectDate = self.birthdaySelectDate;
             datePickerView.minDate = [NSDate br_setYear:2018 month:3 day:10];
@@ -371,7 +372,7 @@ typedef NS_ENUM(NSInteger, BRTimeType) {
             
             [datePickerView show];
             
-            datePickerView.timeTitles = @[@"年", @"月", @"日"];
+            datePickerView.timeTitles = @[@"年", @"月", @"日", @"时", @"分", @"秒"];
 
         }
             break;
