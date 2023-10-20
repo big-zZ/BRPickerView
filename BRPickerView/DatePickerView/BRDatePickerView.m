@@ -1813,7 +1813,7 @@ typedef NS_ENUM(NSInteger, BRDatePickerStyle) {
             x_space = -10.f;
         }
         UILabel *timeLab = [[UILabel alloc] initWithFrame:CGRectMake(x_space + idx * width, 0, width - MAX(x_space, 0.f), 25.f)];
-        timeLab.font = [UIFont fontWithName:@"PingFangSC-Regula" size:12.f];
+        timeLab.font = [UIFont fontWithName:@"PingFangSC-Regular" size:14.f];
         timeLab.adjustsFontSizeToFitWidth = YES;
         timeLab.textAlignment = NSTextAlignmentCenter;
         timeLab.textColor = UIColor.whiteColor;
