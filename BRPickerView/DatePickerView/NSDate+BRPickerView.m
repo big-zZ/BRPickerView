@@ -22,9 +22,9 @@ static const NSCalendarUnit unitFlags = (NSCalendarUnitYear | NSCalendarUnitMont
     if (!sharedCalendar) {
         // 创建日历对象，指定日历的算法（公历/阳历）
         sharedCalendar = [[NSCalendar alloc]initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
-        // NSCalendar 设置时区
-        //sharedCalendar.timeZone = [NSTimeZone timeZoneWithName:@"America/Chicago"];
     }
+    // NSCalendar 设置时区
+    sharedCalendar.timeZone = [NSTimeZone systemTimeZone];
     return sharedCalendar;
 }
 
